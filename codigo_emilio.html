@@ -52,15 +52,15 @@
             margin-bottom: 20px;
         }
         
-        .calculator-logo {
-            width: 150px; /* Tamaño reducido a 150px */
+        .logo {
+            width: 300px;
             height: auto;
             transition: all 0.3s ease;
             cursor: pointer;
             margin-bottom: 20px;
         }
         
-        .calculator-logo:hover {
+        .logo:hover {
             transform: scale(1.05);
             opacity: 0.9;
         }
@@ -225,17 +225,13 @@
             background: #3a5bc0;
         }
     </style>
-    <link rel="icon" type="image/png" href="img/EC.png">
-
 </head>
 <body>
-    <button class="logout-btn" id="logout-btn">Cerrar Sesión</button>
-    
+    <button class="logout-btn" id="logout-btn">Cerrar Sesión </button>
+    <h4>La sesión expirará en 30 minutos</h4>
     <div class="calculator">
         <div class="logo-container">
-            <a href="https://grupoemiliocolor.github.io/mx/index.html" target="_blank" rel="noopener noreferrer">
-                <img src="img/logo.png" alt="Logo EmilioColor" class="calculator-logo" />
-            </a>
+            <img src="img/logo.png" alt="Código Emilio Logo" class="logo" title="Código Emilio">
             <div class="logo-divider"></div>
         </div>
         
@@ -293,10 +289,16 @@
     </div>
 
     <script>
-        // Verificar autenticación al cargar la página
-        if (sessionStorage.getItem('authenticated') !== 'true') {
-            window.location.href = 'index.html';
-        }
+// Verificar autenticación y expiración al cargar la página
+const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
+const expiresAt = parseInt(sessionStorage.getItem('expiresAt'), 10);
+const now = Date.now();
+
+if (!isAuthenticated || isNaN(expiresAt) || now > expiresAt) {
+    sessionStorage.clear(); // Limpiar por seguridad
+    window.location.href = 'login.html'; // Cambia esto si el archivo se llama diferente
+}
+
         
         // Configurar eventos para los radio buttons
         document.querySelectorAll('input[name="conversion-type"]').forEach(radio => {
