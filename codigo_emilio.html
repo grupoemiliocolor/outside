@@ -224,12 +224,97 @@
         .copy-btn:hover {
             background: #3a5bc0;
         }
+        .session-header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logout-btn {
+    background: #c62828;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.logout-btn:hover {
+    background: #b71c1c;
+    transform: translateY(-1px);
+}
+
+.session-header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logout-btn {
+    background: #c62828;
+    color: white;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s;
+    height: auto;
+    width: auto;
+}
+
+.logout-btn:hover {
+    background: #b71c1c;
+    transform: translateY(-1px);
+}
+
+.session-timer {
+    margin: 0;
+    font-weight: normal;
+    font-size: 14px;
+    color: #ccc;
+}
+.plain-hr {
+    all: unset;
+    display: block;
+    height: 1px;
+    background-color: transparent;
+    margin: 10px 0;
+}
+
+
+
     </style>
 </head>
 <body>
-    <button class="logout-btn" id="logout-btn">Cerrar Sesión </button>
-    <h4>La sesión expirará en 30 minutos</h4>
-    <div class="calculator">
+    <div class="session-box">
+        <div class="session-header">
+            <p class="session-timer">La sesión expirará en <span id="timer">30:00</span></p>
+            <button class="logout-btn" id="logout-btn">Cerrar Sesión</button>
+        </div>
+    </div>
+    <hr class="plain-hr">
+    <hr class="plain-hr">
+    <hr class="plain-hr">
+    <hr class="plain-hr">
+    <hr class="plain-hr">
+
+        <div class="calculator">
         <div class="logo-container">
             <img src="img/logo.png" alt="Código Emilio Logo" class="logo" title="Código Emilio">
             <div class="logo-divider"></div>
@@ -505,6 +590,33 @@ if (!isAuthenticated || isNaN(expiresAt) || now > expiresAt) {
             errorElement.textContent = message;
             errorElement.style.display = "block";
         }
+// Contador regresivo de 30 minutos
+let countdown = 30 * 60;
+const timerEl = document.getElementById("timer");
+
+function updateTimer() {
+    const minutes = String(Math.floor(countdown / 60)).padStart(2, '0');
+    const seconds = String(countdown % 60).padStart(2, '0');
+    timerEl.textContent = `${minutes}:${seconds}`;
+
+    if (countdown > 0) {
+        countdown--;
+    } else {
+        sessionStorage.clear();
+        window.location.href = 'https://grupoemiliocolor.github.io/mx/index.html';
+    }
+}
+
+setInterval(updateTimer, 1000);
+updateTimer();
+
+// Evento de cerrar sesión manual
+document.getElementById('logout-btn').addEventListener('click', function() {
+    sessionStorage.removeItem('authenticated');
+    window.location.href = 'https://grupoemiliocolor.github.io/mx/index.html';
+});
+
+
     </script>
 </body>
 </html>
